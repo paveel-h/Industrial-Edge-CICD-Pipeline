@@ -1,4 +1,4 @@
-name: CICD
+name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -71,7 +71,7 @@ jobs:
           pwd
           version=$(ie-app-publisher-linux em app dt -a ${{secrets.APP_ID}} -p | \
             python3 -c "import sys, json; print(json.load(sys.stdin)['versions'][0]['versionNumber'])")
-
+          
           echo $version
           if [ -z "$version" ]
           then
@@ -84,13 +84,13 @@ jobs:
           fi
           ie-app-publisher-linux em app cuv -a ${{secrets.APP_ID}} -v $version_new -y ./docker-compose.prod.yml -n '{"hello-edge":[{"name":"hello-edge","protocol":"HTTP","port":"80","headers":"","rewriteTarget":"/"}]}' -s 'hello-edge' -t 'FromBoxReverseProxy' -u "hello-edge" -r "/"
           ie-app-publisher-linux em app uuv -a ${{secrets.APP_ID}} -v $version_new
-
   deploy: 
     runs-on: self-hosted
     needs: [upload]
     container:
       image: python:3
       options: --privileged
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
      - uses: actions/checkout@v2
