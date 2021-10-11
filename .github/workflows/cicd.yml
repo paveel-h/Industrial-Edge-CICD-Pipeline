@@ -47,8 +47,7 @@ jobs:
      docker: 
         image: docker:18.09-dind
         options: --privileged
-
-        
+  
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/download-artifact@master
