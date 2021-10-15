@@ -68,8 +68,7 @@ jobs:
           ie-app-publisher-linux em li -u ${{secrets.IEM_URL}} -e ${{secrets.USER_NAME}} -p ${{secrets.PSWD}}
           pwd
           version=$(ie-app-publisher-linux em app dt -a ${{secrets.APP_ID}} -p | \
-            python3 -c "import sys, json; print(json.load(sys.stdin)['versions'][0]['versionNumber'])")
-          
+            python3 -c "import sys, json; print(json.load(sys.stdin)['versions'][0]['versionNumber'])")         
           echo $version
           if [ -z "$version" ]
           then
