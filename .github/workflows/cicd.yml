@@ -33,6 +33,7 @@ jobs:
           name: my-artifact
           path: app/artifacts
 
+          
   upload:
     runs-on: self-hosted
     needs: [build]
