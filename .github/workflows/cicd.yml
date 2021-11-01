@@ -87,8 +87,11 @@ jobs:
     runs-on: self-hosted
     needs: [upload]
     container:
-      image: python:3
+      image: halamap26/repopublisher:python
       options: --privileged
+      credentials:
+        username: ${{secrets.DHUB_USER}}
+        password: ${{secrets.DHUB_PSWRD}}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -101,11 +104,9 @@ jobs:
         IE_USER: ${{secrets.USER_NAME}}
         APP_ID: ${{secrets.APP_ID}}
        run: |
-          install $GITHUB_WORKSPACE/publisher/ie-app-publisher-linux /usr/bin/
           export IE_SKIP_CERTIFICATE=true
           ie-app-publisher-linux em li -u ${{secrets.IEM_URL}} -e ${{secrets.USER_NAME}} -p ${{secrets.PSWD}}
-          pip install requests-toolbelt
           appVersionId=$(ie-app-publisher-linux em app dt -a ${{secrets.APP_ID}} -p | \
             python3 -c "import sys, json; print(json.load(sys.stdin)['versions'][0]['versionId'])")
           echo $appVersionId
-          python -u ./script/api_handler.py pipeline --devices device2,devicepavel --appVersionID $appVersionId          
+          python3 -u ./script/api_handler.py pipeline --devices device2,devicepavel --appVersionID $appVersionId          
